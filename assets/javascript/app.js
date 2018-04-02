@@ -2,16 +2,14 @@
 //array of animals
 var animals = ["Dog", "Rhino", "Tiger", "Elephant"];
 
-
-
 //function for unique name and removing spaces
 function setButton(){
     let uniqueNames = [];
-$.each(animals, function(i, el){
-    el=el.toLowerCase().trim();
-    if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-});
-animals=uniqueNames;
+    $.each(animals, function(i, el){
+        el=el.toUpperCase().trim();
+        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+    });
+    animals=uniqueNames;
     $(".btnclass").html("");
     for(var i=0;i<animals.length;i++){
      //   $(".btnclass").append("<button onClick='showImage();' id='"+animals[i]+"'>"+animals[i]+"</button>");
@@ -30,10 +28,6 @@ animals=uniqueNames;
 
 }
 
-//document.reday function
-$( document ).ready(function() {
-    setButton();
-});
 //onclick submit function
 $("#submit").click(function() {
     let value=$("#userinput").val();
@@ -49,7 +43,7 @@ $("#submit").click(function() {
   });
 
 //working with image 
-  function showImage(img){
+function showImage(img){
       $("#giffydiv").html("");
      // console.log(img);
      
@@ -58,12 +52,12 @@ $("#submit").click(function() {
    // Constructing a URL to search Giphy for the name of the person who said the quote
    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
    img + "&api_key=Wj9NBGBXLp1a73G8xbDhSvYDeoona1hK&limit=10";
-  // "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5"
- // Performing our AJAX GET request
- $.ajax({
-   url: queryURL,
-   method: "GET"
- })
+   // "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5"
+   // Performing our AJAX GET request
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    })
    // After the data comes back from the API
    .then(function(response) {
      // Storing an array of results in the results variable
@@ -75,44 +69,51 @@ $("#submit").click(function() {
 
        // Only taking action if the photo has an appropriate rating
        if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-         // Creating a div with the class "item" and using bootstrap to get two image in a row
-         var gifDiv = $("<div class='item col-md-5'>");
+            // Creating a div with the class "item" and using bootstrap to get two image in a row
+            var gifDiv = $("<div class='item col-md-5'>");
 
-         // Storing the result item's rating
-         var rating = results[i].rating;
+            // Storing the result item's rating
+            var rating = results[i].rating;
 
-         // Creating a paragraph tag with the result item's rating
-         var p = $("<p>").text("Rating: " + rating);
+            // Creating a paragraph tag with the result item's rating
+            var p = $("<p>").text("Rating: " + rating);
 
-         // Creating an image tag
-         var animalImage = $("<img>");
+            // Creating an image tag
+            var animalImage = $("<img>");
 
-         // Giving the image tag an src attribute of a proprty pulled off the
-         // result item
-         animalImage.attr("src", results[i].images.original.url);
-        // console.log(animalImage);
-         
+            // Giving the image tag an src attribute of a proprty pulled off the
+            // result item
+            animalImage.attr("data-animate", results[i].images.original.url);
+            animalImage.attr("data-still", results[i].images.fixed_height_still.url);
+            animalImage.attr("data-state", "still");
+            animalImage.attr("src", results[i].images.fixed_height_still.url);
+            // console.log(animalImage);
+            
+            
         
-       // animalImage.attr("data-state", "still");
-        //animalImage.attr({'data-still' : results[i].images.fixed_height_still.url});
+            // Appending the paragraph and animalImage we created to the "gifDiv" div we created
+            gifDiv.append(p);
+            gifDiv.append(animalImage);
 
-         // Appending the paragraph and animalImage we created to the "gifDiv" div we created
-         gifDiv.append(p);
-         gifDiv.append(animalImage);
-
-         // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-         $("#giffydiv").prepend(gifDiv); 
+            // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+            $("#giffydiv").prepend(gifDiv); 
        }
      }     
    }); 
 }
-        // animalImage.on('click',function(){
-        //     var state = $(this).attr("data-state");
-        // if (state === "still") {
-        //     $(this).attr("src", $(this).attr("data-animate"));
-        //     $(this).attr("data-state", "animate");
-        //     } else {
-        //     $(this).attr("src", $(this).attr("data-still"));
-        //     $(this).attr("data-state", "still");
-        //     }
-        // });
+
+$("#giffydiv").on('click', "img", function(){
+    var state = $(this).attr("data-state");
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+});
+
+//document.reday function
+$( document ).ready(function() {
+    setButton();
+});
