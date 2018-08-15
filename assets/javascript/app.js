@@ -49,7 +49,7 @@ function showImage(img){
      
   
 
-   // Constructing a URL to search Giphy for the name of the person who said the quote
+   // Constructing a URL to search Giphy 
    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
    img + "&api_key=Wj9NBGBXLp1a73G8xbDhSvYDeoona1hK&limit=10";
    // "http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5"
